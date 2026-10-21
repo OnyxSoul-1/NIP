@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Internet</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Background Media -->
+    <video id="bg-video" autoplay muted loop playsinline></video>
+    <img id="bg-image" alt="Background">
+    
+    <!-- Interactive Grass Canvas -->
+    <canvas id="grass-canvas"></canvas>
+
+    <!-- Overlay Content -->
+    <div class="content">
+        <img src="dino.png" alt="Dino" class="dino-icon">
+        <h1>No Internet</h1>
+        <p>Try:</p>
+        <ul>
+            <li>Throw your phone away</li>
+            <li>Find a spot in nature</li>
+            <li>Enjoy</li>
+        </ul>
+    </div>
+
+    <!-- Hidden Audio Player -->
+    <audio id="bg-audio" loop></audio>
+
+    <!-- Prompt for Audio -->
+    <div id="audio-prompt" class="prompt">
+        Click anywhere to enable sound
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
