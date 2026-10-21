@@ -47,7 +47,6 @@ body::after {
     pointer-events: none; 
 }
 
-/* Gentle Fade-in and Float-up animation */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -62,13 +61,11 @@ body::after {
 .content {
     position: absolute;
     top: 50%;
-    left: 10%;
+    left: 50px; /* CHANGED FROM 10% TO 50PX TO PREVENT CUT-OFF */
     transform: translateY(-50%);
     color: #fff;
-    /* Soft glowing text */
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.4), 2px 2px 4px rgba(0,0,0,0.8);
     z-index: 3; 
-    /* Apply the animation */
     animation: fadeInUp 2s ease-out forwards; 
 }
 
