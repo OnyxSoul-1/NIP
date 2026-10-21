@@ -1,6 +1,5 @@
 // List your files here. Make sure they are in the same folder.
 const videos = ['video1.mp4', 'video2.mp4', 'video3.mp4', 'video4.mp4'];
-// UPDATED TO .PNG
 const images = ['image1.png', 'image2.png', 'image3.png', 'image4.png', 'image5.png', 'image6.png', 'image7.png', 'image8.png', 'image9.png'];
 const audios = ['audio1.mp3', 'audio2.mp3', 'audio3.mp3', 'audio4.mp3'];
 
@@ -13,6 +12,7 @@ function getRandom(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
+// Load ONE random background (Image or Video) on page load
 function loadRandomBackground() {
     const useVideo = Math.random() > 0.5;
 
@@ -20,38 +20,40 @@ function loadRandomBackground() {
         bgImage.style.display = 'none';
         bgVideo.style.display = 'block';
         bgVideo.src = getRandom(videos);
+        bgVideo.loop = true; // Forces the video to repeat like a GIF
         bgVideo.play().catch(e => console.log("Video autoplay blocked:", e));
     } else {
         bgVideo.pause();
         bgVideo.style.display = 'none';
         bgImage.style.display = 'block';
         bgImage.src = getRandom(images);
+        // The image will just sit there until you refresh the page.
     }
 }
 
-function loadRandomAudio() {
+// Load a random song
+function playNextAudio() {
     bgAudio.src = getRandom(audios);
-    if (prompt.style.display === 'none') {
+    bgAudio.play().catch(e => console.log("Audio play failed:", e));
+}
+
+// 1. Pick the background ONCE when the page loads
+loadRandomBackground();
+
+// 2. When a song finishes, pick a new song
+bgAudio.addEventListener('ended', () => {
+    playNextAudio();
+});
+
+// 3. Handle Audio Autoplay (Browsers require a click before sound can play)
+document.body.addEventListener('click', () => {
+    if (!bgAudio.src) {
+        playNextAudio();
+    } else {
         bgAudio.play().catch(e => console.log("Audio play failed:", e));
     }
-}
-
-// Initial Load
-loadRandomBackground();
-loadRandomAudio();
-
-// Handle Audio Autoplay Policy
-document.body.addEventListener('click', () => {
-    bgAudio.play().then(() => {
-        prompt.style.display = 'none'; 
-    }).catch(e => console.log("Audio play failed:", e));
+    prompt.style.display = 'none'; 
 }, { once: true });
-
-// Change background and music every 15 seconds
-setInterval(() => {
-    loadRandomBackground();
-    loadRandomAudio();
-}, 15000); 
 
 
 // --- INTERACTIVE GRASS CODE ---
