@@ -12,40 +12,30 @@ function getRandom(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-// Load ONE random background (Image or Video) on page load
 function loadRandomBackground() {
     const useVideo = Math.random() > 0.5;
-
     if (useVideo) {
         bgImage.style.display = 'none';
         bgVideo.style.display = 'block';
         bgVideo.src = getRandom(videos);
-        bgVideo.loop = true; // Forces the video to repeat like a GIF
+        bgVideo.loop = true; 
         bgVideo.play().catch(e => console.log("Video autoplay blocked:", e));
     } else {
         bgVideo.pause();
         bgVideo.style.display = 'none';
         bgImage.style.display = 'block';
         bgImage.src = getRandom(images);
-        // The image will just sit there until you refresh the page.
     }
 }
 
-// Load a random song
 function playNextAudio() {
     bgAudio.src = getRandom(audios);
     bgAudio.play().catch(e => console.log("Audio play failed:", e));
 }
 
-// 1. Pick the background ONCE when the page loads
 loadRandomBackground();
+bgAudio.addEventListener('ended', playNextAudio);
 
-// 2. When a song finishes, pick a new song
-bgAudio.addEventListener('ended', () => {
-    playNextAudio();
-});
-
-// 3. Handle Audio Autoplay (Browsers require a click before sound can play)
 document.body.addEventListener('click', () => {
     if (!bgAudio.src) {
         playNextAudio();
@@ -56,19 +46,22 @@ document.body.addEventListener('click', () => {
 }, { once: true });
 
 
-// --- INTERACTIVE GRASS CODE ---
+// --- INTERACTIVE GRASS & FIREFLIES CODE ---
 const canvas = document.getElementById('grass-canvas');
 const ctx = canvas.getContext('2d');
 let width, height;
 let grassBlades = [];
+let fireflies = []; // NEW: Array for fireflies
 let mouse = { x: -1000, y: -1000 };
 
 function resize() {
     width = canvas.width = window.innerWidth;
     height = canvas.height = window.innerHeight;
     initGrass();
+    initFireflies(); // NEW
 }
 
+// --- GRASS ---
 class GrassBlade {
     constructor(x, y) {
         this.x = x;
@@ -79,7 +72,6 @@ class GrassBlade {
         this.angle = 0;
         this.targetAngle = 0;
     }
-
     draw() {
         ctx.save();
         ctx.translate(this.x, this.y);
@@ -94,12 +86,10 @@ class GrassBlade {
         ctx.stroke();
         ctx.restore();
     }
-
     update() {
         const dx = mouse.x - this.x;
         const dy = mouse.y - this.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
-        
         if (distance < 150) {
             const force = (150 - distance) / 150;
             const mouseAngle = Math.atan2(dy, dx);
@@ -108,7 +98,6 @@ class GrassBlade {
             this.targetAngle = 0;
         }
         this.angle += (this.targetAngle - this.angle) * 0.1;
-        
         if (this.targetAngle === 0) {
             this.angle += Math.sin(Date.now() * 0.002 + this.x) * 0.005;
         }
@@ -119,18 +108,87 @@ function initGrass() {
     grassBlades = [];
     const amount = Math.floor(width / 8); 
     for (let i = 0; i < amount; i++) {
-        const x = Math.random() * width;
-        const y = height - Math.random() * 20; 
-        grassBlades.push(new GrassBlade(x, y));
+        grassBlades.push(new GrassBlade(Math.random() * width, height - Math.random() * 20));
     }
 }
 
+// --- FIREFLIES (NEW) ---
+class Firefly {
+    constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        // Random slow speeds
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+        this.radius = Math.random() * 2 + 1;
+        this.opacity = Math.random();
+        this.pulseSpeed = Math.random() * 0.02 + 0.01;
+        this.pulseDir = 1;
+    }
+    
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        // Warm glowing color (yellowish-green)
+        ctx.fillStyle = `rgba(200, 255, 150, ${this.opacity})`;
+        // Add a nice glow
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = `rgba(200, 255, 150, ${this.opacity})`;
+        ctx.fill();
+        ctx.shadowBlur = 0; // reset
+    }
+
+    update() {
+        // Move slowly
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Wrap around screen edges
+        if (this.x < 0) this.x = width;
+        if (this.x > width) this.x = 0;
+        if (this.y < 0) this.y = height;
+        if (this.y > height) this.y = 0;
+
+        // Pulse the opacity in and out
+        this.opacity += this.pulseSpeed * this.pulseDir;
+        if (this.opacity > 1) { this.opacity = 1; this.pulseDir = -1; }
+        if (this.opacity < 0) { this.opacity = 0; this.pulseDir = 1; }
+
+        // Run away slightly if mouse gets too close
+        const dx = mouse.x - this.x;
+        const dy = mouse.y - this.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100) {
+            this.x -= dx * 0.02;
+            this.y -= dy * 0.02;
+        }
+    }
+}
+
+function initFireflies() {
+    fireflies = [];
+    const amount = 40; // Number of fireflies on screen
+    for (let i = 0; i < amount; i++) {
+        fireflies.push(new Firefly());
+    }
+}
+
+// --- ANIMATION LOOP ---
 function animate() {
     ctx.clearRect(0, 0, width, height);
+    
+    // Draw Fireflies first (behind the grass)
+    fireflies.forEach(fly => {
+        fly.update();
+        fly.draw();
+    });
+
+    // Draw Grass
     grassBlades.forEach(blade => {
         blade.update();
         blade.draw();
     });
+    
     requestAnimationFrame(animate);
 }
 
