@@ -6,9 +6,8 @@ A nostalgic, interactive "No Internet" webpage inspired by the classic Chrome Di
 
 - 🖱️ **Custom Cursor:** A pixel-art Ender Pearl replaces the default mouse cursor.
 - 🌿 **Interactive Grass:** HTML5 Canvas draws grass at the bottom of the screen that bends and sways when you move your mouse near it.
-- 🎥 **Random Backgrounds:** The page randomly picks between 9 images and 4 videos to display in the background.
+- 🎥 **Random Backgrounds:** The page randomly picks between images and videos to display in the background.
 - 🎵 **Random Music:** Plays one of 4 MP3 tracks. (Note: Browsers require you to click the screen once to enable audio autoplay).
-- 🦖 **Classic Dino:** Features the iconic Chrome T-Rex and the "Try: Find a spot in nature" text.
 
 ## 📁 File Structure
 
@@ -21,7 +20,6 @@ To make this work on your own GitHub Pages, you need to upload the following fil
 
 **Image Assets:**
 - `cursor.png` (Your custom cursor, ideally 32x32 pixels)
-- `dino.png` (The white Chrome dinosaur with a transparent background)
 - `image1.png` to `image9.png` (Your 9 background images)
 
 **Video Assets:**
