@@ -1,7 +1,7 @@
 // List your files here. Make sure they are in the same folder.
-const videos = ['video1.mp4', 'video2.mp4', 'video3.mp4', 'video4.mp4'];
-const images = ['image1.png', 'image2.png', 'image3.png', 'image4.png', 'image5.png', 'image6.png', 'image7.png', 'image8.png', 'image9.png'];
-const audios = ['audio1.mp3', 'audio2.mp3', 'audio3.mp3', 'audio4.mp3'];
+const videos = ['video1.mp4', 'video2.mp4', 'video3.mp4', 'video4.mp4', 'video5.mp4', 'video6.mp4'];
+const images = ['image1.png', 'image2.png', 'image3.png', 'image4.png', 'image5.png', 'image6.png', 'image7.png', 'image8.png', 'image9.png', 'image10.png', 'image11.png', 'image12.png', 'image13.png', 'image14.png', 'image15.png'];
+const audios = ['audio1.mp3', 'audio2.mp3', 'audio3.mp3', 'audio4.mp3', 'audio5.mp3', 'audio6.mp3'];
 
 const bgVideo = document.getElementById('bg-video');
 const bgImage = document.getElementById('bg-image');
